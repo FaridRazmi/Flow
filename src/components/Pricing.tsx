@@ -46,47 +46,36 @@ export default function Pricing() {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('in-view'); }),
-      { threshold: 0.1 }
+      { threshold: 0.08 }
     );
     ref.current?.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 
   return (
-    <section id="pricing" ref={ref} style={{ background: '#080610', padding: '100px 0' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+    <section id="pricing" ref={ref} style={{ background: '#080610', padding: 'clamp(60px, 10vw, 100px) 0' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 clamp(16px, 5vw, 24px)' }}>
+
         {/* Header */}
-        <div className="reveal text-center mb-16" style={{ opacity: 0, transform: 'translateY(30px)', transition: 'all 0.7s cubic-bezier(0.22,1,0.36,1)' }}>
+        <div className="reveal text-center" style={{ opacity: 0, transform: 'translateY(30px)', transition: 'all 0.7s cubic-bezier(0.22,1,0.36,1)', marginBottom: 'clamp(40px, 6vw, 64px)' }}>
           <p style={{ fontFamily: "'Inter', sans-serif", color: '#b794f4', fontSize: '12px', letterSpacing: '3px', fontWeight: 600, textTransform: 'uppercase', marginBottom: '12px' }}>
             Transparent Pricing
           </p>
-          <h2 style={{ fontFamily: "'Instrument Serif', serif", color: 'white', fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 1.1, marginBottom: '14px' }}>
+          <h2 style={{ fontFamily: "'Instrument Serif', serif", color: 'white', fontSize: 'clamp(1.8rem, 5vw, 3.5rem)', lineHeight: 1.1, marginBottom: '14px' }}>
             Simple, Fair Pricing
           </h2>
-          <p style={{ fontFamily: "'Inter', sans-serif", color: 'rgba(255,255,255,0.5)', fontSize: '1rem', maxWidth: '460px', margin: '0 auto' }}>
+          <p style={{ fontFamily: "'Inter', sans-serif", color: 'rgba(255,255,255,0.5)', fontSize: 'clamp(0.875rem, 2vw, 1rem)', maxWidth: '460px', margin: '0 auto' }}>
             No hidden fees. No surprises. Just great work at honest prices.
           </p>
         </div>
 
-        {/* Website Plans */}
-        <h3
-          className="reveal"
-          style={{
-            opacity: 0,
-            transform: 'translateY(20px)',
-            transition: 'all 0.6s ease',
-            fontFamily: "'Inter', sans-serif",
-            color: '#63b3ed',
-            fontSize: '0.75rem',
-            fontWeight: 700,
-            letterSpacing: '2.5px',
-            textTransform: 'uppercase',
-            marginBottom: '20px',
-          }}
-        >
+        {/* Website Plans label */}
+        <h3 className="reveal" style={{ opacity: 0, transform: 'translateY(20px)', transition: 'all 0.6s ease', fontFamily: "'Inter', sans-serif", color: '#63b3ed', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '2.5px', textTransform: 'uppercase', marginBottom: '16px' }}>
           Website Build Service
         </h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', marginBottom: '56px' }}>
+
+        {/* 1 col → 3 col pricing grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))', gap: '16px', marginBottom: '48px' }}>
           {websitePlans.map((plan, i) => (
             <div
               key={plan.name}
@@ -98,8 +87,9 @@ export default function Pricing() {
                 background: plan.highlight ? `${plan.accent}12` : 'rgba(255,255,255,0.03)',
                 border: `1px solid ${plan.highlight ? plan.accent + '40' : 'rgba(255,255,255,0.08)'}`,
                 borderRadius: '20px',
-                padding: '36px 30px',
+                padding: 'clamp(24px, 4vw, 36px) clamp(20px, 3vw, 30px)',
                 position: 'relative',
+                marginTop: plan.highlight ? '12px' : '0',
               }}
             >
               {plan.highlight && (
@@ -111,14 +101,14 @@ export default function Pricing() {
                 {plan.name}
               </p>
               <div style={{ marginBottom: '4px' }}>
-                <span style={{ fontFamily: "'Instrument Serif', serif", color: 'white', fontSize: '2.5rem', lineHeight: 1.1 }}>{plan.price}</span>
+                <span style={{ fontFamily: "'Instrument Serif', serif", color: 'white', fontSize: 'clamp(2rem, 5vw, 2.5rem)', lineHeight: 1.1 }}>{plan.price}</span>
                 <span style={{ fontFamily: "'Inter', sans-serif", color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', marginLeft: '6px' }}>{plan.period}</span>
               </div>
-              <p style={{ fontFamily: "'Inter', sans-serif", color: 'rgba(255,255,255,0.5)', fontSize: '0.875rem', marginBottom: '24px', lineHeight: 1.5 }}>{plan.desc}</p>
-              <ul style={{ listStyle: 'none', padding: 0, marginBottom: '28px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <p style={{ fontFamily: "'Inter', sans-serif", color: 'rgba(255,255,255,0.5)', fontSize: '0.875rem', marginBottom: '20px', lineHeight: 1.5 }}>{plan.desc}</p>
+              <ul style={{ listStyle: 'none', padding: 0, marginBottom: '24px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {plan.features.map((f) => (
-                  <li key={f} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontFamily: "'Inter', sans-serif", color: 'rgba(255,255,255,0.75)', fontSize: '0.875rem' }}>
-                    <Check size={14} color={plan.accent} strokeWidth={2.5} style={{ flexShrink: 0 }} />
+                  <li key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontFamily: "'Inter', sans-serif", color: 'rgba(255,255,255,0.75)', fontSize: '0.875rem' }}>
+                    <Check size={14} color={plan.accent} strokeWidth={2.5} style={{ flexShrink: 0, marginTop: '2px' }} />
                     {f}
                   </li>
                 ))}
@@ -126,20 +116,7 @@ export default function Pricing() {
               <a
                 href="#contact"
                 onClick={(e) => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }}
-                style={{
-                  display: 'block',
-                  textAlign: 'center',
-                  fontFamily: "'Inter', sans-serif",
-                  background: plan.highlight ? plan.accent : 'rgba(255,255,255,0.08)',
-                  color: plan.highlight ? '#000' : 'white',
-                  borderRadius: '999px',
-                  padding: '12px',
-                  fontWeight: 600,
-                  fontSize: '0.875rem',
-                  textDecoration: 'none',
-                  transition: 'opacity 0.2s ease',
-                  border: plan.highlight ? 'none' : '1px solid rgba(255,255,255,0.1)',
-                }}
+                style={{ display: 'block', textAlign: 'center', fontFamily: "'Inter', sans-serif", background: plan.highlight ? plan.accent : 'rgba(255,255,255,0.08)', color: plan.highlight ? '#000' : 'white', borderRadius: '999px', padding: '12px', fontWeight: 600, fontSize: '0.875rem', textDecoration: 'none', border: plan.highlight ? 'none' : '1px solid rgba(255,255,255,0.1)' }}
               >
                 {plan.cta}
               </a>
@@ -147,47 +124,21 @@ export default function Pricing() {
           ))}
         </div>
 
-        {/* NFC Plans */}
-        <h3
-          className="reveal"
-          style={{
-            opacity: 0,
-            transform: 'translateY(20px)',
-            transition: 'all 0.6s ease 100ms',
-            fontFamily: "'Inter', sans-serif",
-            color: '#b794f4',
-            fontSize: '0.75rem',
-            fontWeight: 700,
-            letterSpacing: '2.5px',
-            textTransform: 'uppercase',
-            marginBottom: '20px',
-          }}
-        >
+        {/* NFC Plans label */}
+        <h3 className="reveal" style={{ opacity: 0, transform: 'translateY(20px)', transition: 'all 0.6s ease 100ms', fontFamily: "'Inter', sans-serif", color: '#b794f4', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '2.5px', textTransform: 'uppercase', marginBottom: '16px' }}>
           Flow NFC Card
         </h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))', gap: '12px' }}>
           {nfcPlans.map((plan, i) => (
             <div
               key={plan.name}
               className="reveal service-card"
-              style={{
-                opacity: 0,
-                transform: 'translateY(30px)',
-                transition: `all 0.7s cubic-bezier(0.22,1,0.36,1) ${i * 80}ms`,
-                background: 'rgba(183, 148, 244, 0.05)',
-                border: '1px solid rgba(183, 148, 244, 0.15)',
-                borderRadius: '16px',
-                padding: '24px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '16px',
-              }}
+              style={{ opacity: 0, transform: 'translateY(30px)', transition: `all 0.7s cubic-bezier(0.22,1,0.36,1) ${i * 80}ms`, background: 'rgba(183,148,244,0.05)', border: '1px solid rgba(183,148,244,0.15)', borderRadius: '16px', padding: '20px' }}
             >
-              <div>
-                <p style={{ fontFamily: "'Instrument Serif', serif", color: 'white', fontSize: '1.5rem' }}>{plan.price}</p>
-                <p style={{ fontFamily: "'Inter', sans-serif", color: '#b794f4', fontSize: '0.875rem', fontWeight: 600, marginBottom: '4px' }}>{plan.name}</p>
-                <p style={{ fontFamily: "'Inter', sans-serif", color: 'rgba(255,255,255,0.5)', fontSize: '0.8rem' }}>{plan.desc}</p>
-              </div>
+              <p style={{ fontFamily: "'Instrument Serif', serif", color: 'white', fontSize: '1.5rem' }}>{plan.price}</p>
+              <p style={{ fontFamily: "'Inter', sans-serif", color: '#b794f4', fontSize: '0.875rem', fontWeight: 600, marginBottom: '4px' }}>{plan.name}</p>
+              <p style={{ fontFamily: "'Inter', sans-serif", color: 'rgba(255,255,255,0.5)', fontSize: '0.8rem' }}>{plan.desc}</p>
             </div>
           ))}
         </div>

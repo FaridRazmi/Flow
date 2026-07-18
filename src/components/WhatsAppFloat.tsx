@@ -6,23 +6,14 @@ export default function WhatsAppFloat() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with us on WhatsApp"
-      className="whatsapp-float"
+      className="whatsapp-float fixed bottom-4 right-4 md:bottom-7 md:right-7 z-50 flex items-center justify-center rounded-full transition-all duration-200"
       style={{
-        position: 'fixed',
-        bottom: '28px',
-        right: '28px',
-        zIndex: 100,
-        width: '56px',
-        height: '56px',
-        borderRadius: '50%',
+        width: 'clamp(48px, 12vw, 56px)',
+        height: 'clamp(48px, 12vw, 56px)',
         background: 'linear-gradient(135deg, #25D366, #128C7E)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
         boxShadow: '0 8px 32px rgba(37, 211, 102, 0.35)',
         textDecoration: 'none',
         cursor: 'pointer',
-        transition: 'transform 0.2s ease, box-shadow 0.2s ease',
       }}
       onMouseEnter={(e) => {
         (e.currentTarget as HTMLAnchorElement).style.transform = 'scale(1.12)';
