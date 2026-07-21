@@ -2,31 +2,37 @@ import { useState, useRef } from 'react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const faqs = [
-  { q: 'How long does a project take?', a: 'Most sites launch in 2–4 weeks. We give you a clear timeline before we start.' },
-  { q: 'How many revisions are included?', a: 'Unlimited rounds until you are 100% satisfied. We want you to love every detail.' },
-  { q: 'Do you help with hosting and domain?', a: 'Yes. We set up hosting and guide you through domain registration. We recommend Cloudflare for performance and security.' },
-  { q: 'Do you offer maintenance after launch?', a: 'All projects include at least one month of support. Extended maintenance retainers are available.' },
+  { q: 'How long does a project take?', a: 'Most sites launch in 2–4 weeks. We give you a clear timeline before starting.' },
+  { q: 'How many revisions do I get?', a: 'Unlimited. We refine until you are 100% happy with every detail.' },
+  { q: 'Do you help with hosting and domain?', a: 'Yes. We handle hosting setup and guide you through domain registration.' },
+  { q: 'What about maintenance after launch?', a: 'Every project includes at least one month of support. Extended retainers available.' },
   { q: 'How do I get started?', a: 'Fill out the contact form below or message us on WhatsApp. We respond within 24 hours.' },
 ];
 
 function Item({ faq }: { faq: typeof faqs[0] }) {
   const [open, setOpen] = useState(false);
-  const bodyRef = useRef<HTMLDivElement>(null);
+  const body = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="border-b border-[var(--color-border)]">
+    <div style={{ borderBottom: '1px solid var(--hairline-soft)' }}>
       <button
         onClick={() => setOpen(!open)}
         aria-expanded={open}
-        className="w-full flex justify-between items-center py-5 md:py-6 bg-transparent border-none cursor-pointer text-left gap-6"
+        className="w-full flex justify-between items-center bg-transparent border-none cursor-pointer text-left"
+        style={{ padding: '20px 0', gap: 20 }}
       >
-        <span className="text-[15px] md:text-base text-white/90 font-normal leading-snug">{faq.q}</span>
-        <span className="text-xl text-[var(--color-text-muted)] shrink-0 transition-transform duration-300" style={{ transform: open ? 'rotate(45deg)' : 'none' }}>
+        <span style={{ fontSize: 15, fontWeight: 400, color: 'var(--ink)', lineHeight: 1.3, letterSpacing: '-0.01em' }}>
+          {faq.q}
+        </span>
+        <span
+          className="shrink-0 transition-transform duration-300"
+          style={{ fontSize: 20, color: 'var(--ink-muted)', transform: open ? 'rotate(45deg)' : 'none', lineHeight: 1 }}
+        >
           +
         </span>
       </button>
-      <div style={{ height: open ? bodyRef.current?.scrollHeight + 'px' : '0', overflow: 'hidden', transition: 'height 0.35s ease' }}>
-        <p ref={bodyRef} className="text-sm text-[var(--color-text-secondary)] leading-relaxed pb-6 pr-12">
+      <div style={{ height: open ? body.current?.scrollHeight + 'px' : '0', overflow: 'hidden', transition: 'height 0.35s ease' }}>
+        <p ref={body} style={{ color: 'var(--ink-muted)', fontSize: 15, lineHeight: 1.3, paddingBottom: 20, paddingRight: 44 }}>
           {faq.a}
         </p>
       </div>
@@ -38,16 +44,26 @@ export default function FAQ() {
   const ref = useScrollReveal();
 
   return (
-    <section id="faq" ref={ref} className="py-24 md:py-36" style={{ background: 'var(--color-surface)' }}>
-      <div className="max-w-[720px] mx-auto px-6 lg:px-12">
-        <div className="reveal mb-12 md:mb-16" style={{ opacity: 0, transform: 'translateY(24px)', transition: 'all 0.7s ease' }}>
-          <p className="text-xs tracking-[0.2em] uppercase text-[var(--color-text-muted)] mb-4">FAQ</p>
-          <h2 className="text-3xl md:text-4xl leading-tight" style={{ fontFamily: 'var(--font-display)' }}>
+    <section id="faq" ref={ref} style={{ padding: 'clamp(48px, 8vw, 96px) 0' }}>
+      <div className="max-w-[680px] mx-auto px-6 lg:px-10">
+        <div className="reveal mb-10" style={{ opacity: 0, transform: 'translateY(20px)', transition: 'all 0.6s ease' }}>
+          <p style={{ color: 'var(--ink-muted)', fontSize: 13, fontWeight: 500, letterSpacing: '-0.01em', marginBottom: 16 }}>
+            FAQ
+          </p>
+          <h2
+            style={{
+              fontWeight: 500,
+              lineHeight: 1,
+              letterSpacing: 'clamp(-2px, -0.04em, -1px)',
+              fontSize: 'clamp(32px, 6vw, 62px)',
+              color: 'var(--ink)',
+            }}
+          >
             Common questions.
           </h2>
         </div>
 
-        <div className="reveal" style={{ opacity: 0, transform: 'translateY(24px)', transition: 'all 0.7s ease 80ms' }}>
+        <div className="reveal" style={{ opacity: 0, transform: 'translateY(16px)', transition: 'all 0.6s ease 60ms' }}>
           {faqs.map((faq, i) => <Item key={i} faq={faq} />)}
         </div>
       </div>

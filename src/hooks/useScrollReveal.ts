@@ -1,33 +1,18 @@
 import { useEffect, useRef } from 'react';
 
-export function useScrollReveal(options = { threshold: 0.08 }) {
+export function useScrollReveal(threshold = 0.1) {
   const ref = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
-    // Respect prefers-reduced-motion
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    
-    if (prefersReducedMotion) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       ref.current?.querySelectorAll('.reveal').forEach((el) => el.classList.add('in-view'));
       return;
     }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add('in-view');
-          }
-        });
-      },
-      options
+    const obs = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('in-view'); }),
+      { threshold }
     );
-    
-    const elements = ref.current?.querySelectorAll('.reveal');
-    elements?.forEach((el) => observer.observe(el));
-    
-    return () => observer.disconnect();
-  }, [options.threshold]);
-
+    ref.current?.querySelectorAll('.reveal').forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
+  }, [threshold]);
   return ref;
 }

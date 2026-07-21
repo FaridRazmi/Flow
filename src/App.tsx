@@ -11,12 +11,15 @@ import WhatsAppFloat from './components/WhatsAppFloat';
 export default function App() {
   return (
     <>
-      <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:z-[100] focus:top-4 focus:left-4 focus:bg-white focus:text-black focus:px-4 focus:py-2 focus:rounded">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:z-[200] focus:top-3 focus:left-3 focus:bg-[var(--primary)] focus:text-white focus:px-4 focus:py-2 focus:rounded-full focus:text-sm"
+      >
         Skip to content
       </a>
       <Navbar />
-      <Hero />
       <main id="main">
+        <Hero />
         <Services />
         <HowItWorks />
         <Portfolio />

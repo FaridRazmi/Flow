@@ -1,39 +1,70 @@
-import { Globe, Paintbrush, Code2, Rocket } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const items = [
-  { icon: Globe, title: 'Web Design', desc: 'Custom layouts that reflect your brand and speak to your audience.' },
-  { icon: Code2, title: 'Development', desc: 'Clean, fast code. Every site is responsive and optimized for search.' },
-  { icon: Paintbrush, title: 'Brand Identity', desc: 'Consistent visual language across your site, from typography to color.' },
-  { icon: Rocket, title: 'Launch & Support', desc: 'We handle hosting, deployment, and ongoing maintenance.' },
+  {
+    title: 'Web Design',
+    desc: 'Custom layouts that reflect your brand. Every pixel intentional, every page purposeful.',
+    gradient: 'linear-gradient(135deg, #6a4cf5, #d44df0)',
+  },
+  {
+    title: 'Development',
+    desc: 'Clean, fast code — responsive across every device and optimized for search engines.',
+    gradient: 'linear-gradient(135deg, #ff7a3d, #ff5577)',
+  },
+  {
+    title: 'Brand Identity',
+    desc: 'Consistent visual language from typography to color, built to make your business memorable.',
+    gradient: null,
+  },
+  {
+    title: 'Launch & Support',
+    desc: 'We handle hosting, deployment, and ongoing maintenance so you can focus on what matters.',
+    gradient: null,
+  },
 ];
 
 export default function Services() {
   const ref = useScrollReveal();
 
   return (
-    <section id="services" ref={ref} className="py-24 md:py-36">
-      <div className="max-w-[1100px] mx-auto px-6 lg:px-12">
-        <div className="reveal mb-16 md:mb-24 max-w-lg" style={{ opacity: 0, transform: 'translateY(24px)', transition: 'all 0.7s ease' }}>
-          <p className="text-xs tracking-[0.2em] uppercase text-[var(--color-text-muted)] mb-4">What we do</p>
-          <h2 className="text-3xl md:text-5xl leading-tight mb-5" style={{ fontFamily: 'var(--font-display)' }}>
-            Everything you need to go live.
-          </h2>
-          <p className="text-[var(--color-text-secondary)] leading-relaxed">
-            From first sketch to final deploy — we handle the entire process so you can focus on your business.
+    <section id="services" ref={ref} style={{ padding: 'clamp(48px, 8vw, 96px) 0' }}>
+      <div className="max-w-[1100px] mx-auto px-6 lg:px-10">
+        <div className="reveal mb-14 md:mb-20 text-center" style={{ opacity: 0, transform: 'translateY(20px)', transition: 'all 0.6s ease' }}>
+          <p style={{ color: 'var(--ink-muted)', fontSize: 13, fontWeight: 500, letterSpacing: '-0.01em', marginBottom: 16 }}>
+            What we do
           </p>
+          <h2
+            style={{
+              fontWeight: 500,
+              lineHeight: 1,
+              letterSpacing: 'clamp(-2px, -0.04em, -1px)',
+              fontSize: 'clamp(32px, 6vw, 62px)',
+              color: 'var(--ink)',
+            }}
+          >
+            Everything you need<br className="hidden sm:block" /> to go live.
+          </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-[var(--color-border)] rounded-2xl overflow-hidden">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {items.map((item, i) => (
             <div
               key={item.title}
-              className="reveal bg-[var(--color-bg)] p-8 md:p-10 group"
-              style={{ opacity: 0, transform: 'translateY(24px)', transition: `all 0.6s ease ${i * 80}ms` }}
+              className="reveal rounded-[20px] p-8 md:p-10 flex flex-col justify-end"
+              style={{
+                opacity: 0,
+                transform: 'translateY(20px)',
+                transition: `all 0.6s ease ${i * 80}ms`,
+                background: item.gradient || 'var(--surface-1)',
+                minHeight: item.gradient ? 280 : 200,
+              }}
             >
-              <item.icon size={20} strokeWidth={1.5} className="text-[var(--color-text-muted)] mb-5 group-hover:text-white transition-colors duration-300" />
-              <h3 className="text-lg font-medium mb-2">{item.title}</h3>
-              <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed">{item.desc}</p>
+              <h3 style={{ fontWeight: 500, fontSize: 'clamp(24px, 3vw, 32px)', letterSpacing: '-0.03em', marginBottom: 8, lineHeight: 1.13, color: 'var(--ink)' }}>
+                {item.title}
+              </h3>
+              <p style={{ color: item.gradient ? 'rgba(255,255,255,0.8)' : 'var(--ink-muted)', fontSize: 15, lineHeight: 1.3, maxWidth: 360 }}>
+                {item.desc}
+              </p>
             </div>
           ))}
         </div>

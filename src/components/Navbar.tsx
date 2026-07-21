@@ -1,52 +1,55 @@
 import { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
 
-const links = ['Services', 'Work', 'Process', 'FAQ', 'Contact'];
+const links = ['Services', 'Process', 'Work', 'FAQ', 'Contact'];
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    const fn = () => setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', fn, { passive: true });
+    return () => window.removeEventListener('scroll', fn);
   }, []);
 
   useEffect(() => {
-    if (open) {
-      document.body.style.overflow = 'hidden';
-      const esc = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
-      document.addEventListener('keydown', esc);
-      return () => { document.body.style.overflow = ''; document.removeEventListener('keydown', esc); };
-    }
+    if (!open) return;
+    document.body.style.overflow = 'hidden';
+    const esc = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
+    document.addEventListener('keydown', esc);
+    return () => { document.body.style.overflow = ''; document.removeEventListener('keydown', esc); };
   }, [open]);
 
   const go = (id: string) => {
     setOpen(false);
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById(id.toLowerCase())?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
     <>
       <nav
-        className="fixed top-0 inset-x-0 z-50 flex items-center justify-between h-16 px-6 lg:px-12 transition-all duration-500"
+        className="fixed top-0 inset-x-0 z-50 flex items-center justify-between"
         style={{
-          background: scrolled ? 'rgba(9,9,11,0.9)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(12px)' : 'none',
-          borderBottom: scrolled ? '1px solid var(--color-border)' : '1px solid transparent',
+          height: 56,
+          padding: '0 clamp(20px, 4vw, 48px)',
+          background: scrolled ? 'rgba(9,9,9,0.8)' : 'transparent',
+          backdropFilter: scrolled ? 'saturate(180%) blur(20px)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'saturate(180%) blur(20px)' : 'none',
+          borderBottom: scrolled ? '1px solid var(--hairline-soft)' : '1px solid transparent',
+          transition: 'all 0.3s ease',
         }}
       >
-        <a href="#" className="text-xl font-semibold tracking-wide" style={{ fontFamily: 'var(--font-brand)' }}>
+        <a href="#" style={{ fontSize: 18, fontWeight: 600, letterSpacing: '-0.04em', color: 'var(--ink)' }}>
           Flow
         </a>
 
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-6">
           {links.map((l) => (
             <button
               key={l}
-              onClick={() => go(l.toLowerCase())}
-              className="text-sm text-[var(--color-text-secondary)] hover:text-white transition-colors bg-transparent border-none cursor-pointer"
+              onClick={() => go(l)}
+              className="bg-transparent border-none cursor-pointer hover:text-white transition-colors"
+              style={{ fontSize: 14, fontWeight: 500, color: 'var(--ink-muted)', letterSpacing: '-0.01em' }}
             >
               {l}
             </button>
@@ -54,7 +57,8 @@ export default function Navbar() {
           <a
             href="#contact"
             onClick={(e) => { e.preventDefault(); go('contact'); }}
-            className="text-sm px-5 py-2 border border-[var(--color-border)] rounded-full text-white hover:bg-white hover:text-black transition-all duration-300"
+            className="inline-flex items-center justify-center rounded-full hover:opacity-90 active:scale-95 transition-all"
+            style={{ background: 'var(--primary)', color: 'var(--on-primary)', fontSize: 14, fontWeight: 500, padding: '10px 18px', letterSpacing: '-0.01em' }}
           >
             Get in touch
           </a>
@@ -63,43 +67,51 @@ export default function Navbar() {
         <button
           aria-label="Menu"
           aria-expanded={open}
-          className="md:hidden w-11 h-11 flex flex-col justify-center items-center gap-[5px] bg-transparent border-none cursor-pointer"
           onClick={() => setOpen(!open)}
+          className="md:hidden w-11 h-11 flex flex-col justify-center items-center gap-[5px] bg-transparent border-none cursor-pointer"
         >
-          <span className="block w-5 h-[1.5px] bg-white transition-transform duration-300" style={{ transform: open ? 'translateY(3.25px) rotate(45deg)' : 'none' }} />
-          <span className="block w-5 h-[1.5px] bg-white transition-all duration-300" style={{ opacity: open ? 0 : 1 }} />
-          <span className="block w-5 h-[1.5px] bg-white transition-transform duration-300" style={{ transform: open ? 'translateY(-3.25px) rotate(-45deg)' : 'none' }} />
+          {[0, 1, 2].map((i) => (
+            <span
+              key={i}
+              className="block w-[18px] h-[1.5px] bg-white transition-all duration-300"
+              style={{
+                opacity: i === 1 && open ? 0 : 1,
+                transform:
+                  i === 0 && open ? 'translateY(3.25px) rotate(45deg)' :
+                  i === 2 && open ? 'translateY(-3.25px) rotate(-45deg)' : 'none',
+              }}
+            />
+          ))}
         </button>
       </nav>
 
-      {open && <div className="fixed inset-0 z-40 bg-black/60" onClick={() => setOpen(false)} />}
-
-      <div
-        className="fixed top-0 right-0 bottom-0 z-50 w-[80%] max-w-[320px] flex flex-col p-10 pt-20 transition-transform duration-400"
-        style={{
-          background: 'var(--color-bg)',
-          borderLeft: '1px solid var(--color-border)',
-          transform: open ? 'translateX(0)' : 'translateX(100%)',
-        }}
-      >
-        <button onClick={() => setOpen(false)} aria-label="Close" className="absolute top-5 right-5 text-[var(--color-text-muted)] bg-transparent border-none cursor-pointer">
-          <X size={20} />
-        </button>
-        {links.map((l, i) => (
-          <button
-            key={l}
-            onClick={() => go(l.toLowerCase())}
-            className="text-left text-lg py-3 text-[var(--color-text-secondary)] hover:text-white transition-all bg-transparent border-none cursor-pointer border-b border-b-[var(--color-border)]"
-            style={{
-              opacity: open ? 1 : 0,
-              transform: open ? 'none' : 'translateX(16px)',
-              transition: `all 0.3s ease ${100 + i * 60}ms`,
-            }}
-          >
-            {l}
-          </button>
-        ))}
-      </div>
+      {open && (
+        <>
+          <div className="fixed inset-0 z-40 bg-black/50" onClick={() => setOpen(false)} />
+          <div className="fixed inset-0 z-50 flex flex-col justify-center items-center gap-8" style={{ background: 'var(--canvas)' }}>
+            <button onClick={() => setOpen(false)} aria-label="Close" className="absolute top-4 right-5 w-11 h-11 flex items-center justify-center bg-transparent border-none cursor-pointer text-white/50 text-2xl">
+              ×
+            </button>
+            {links.map((l, i) => (
+              <button
+                key={l}
+                onClick={() => go(l)}
+                className="bg-transparent border-none cursor-pointer text-white hover:opacity-70 transition-opacity"
+                style={{
+                  fontSize: 32,
+                  fontWeight: 500,
+                  letterSpacing: '-0.04em',
+                  opacity: open ? 1 : 0,
+                  transform: open ? 'none' : 'translateY(12px)',
+                  transition: `all 0.3s ease ${60 + i * 50}ms`,
+                }}
+              >
+                {l}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
     </>
   );
 }

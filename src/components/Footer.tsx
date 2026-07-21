@@ -1,56 +1,61 @@
-import { Mail } from 'lucide-react';
-
 const go = (id: string) => (e: React.MouseEvent) => {
   e.preventDefault();
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 };
 
+const cols = [
+  { title: 'Navigate', links: [{ label: 'Services', id: 'services', href: '' }, { label: 'Process', id: 'process', href: '' }, { label: 'Work', id: 'work', href: '' }, { label: 'FAQ', id: 'faq', href: '' }, { label: 'Contact', id: 'contact', href: '' }] },
+  { title: 'Connect', links: [{ label: 'hello@flow.my', id: '', href: 'mailto:hello@flow.my' }, { label: 'WhatsApp', id: '', href: 'https://wa.me/601234567890' }] },
+];
+
 export default function Footer() {
   return (
-    <footer className="border-t border-[var(--color-border)] pt-16 pb-8">
-      <div className="max-w-[1100px] mx-auto px-6 lg:px-12">
-        <div className="flex flex-col lg:flex-row justify-between gap-12 mb-16">
-          <div className="max-w-xs">
-            <h2 className="text-2xl font-semibold mb-3" style={{ fontFamily: 'var(--font-brand)' }}>Flow</h2>
-            <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed">
-              Professional websites for businesses that care about their online presence.
+    <footer style={{ borderTop: '1px solid var(--hairline-soft)', padding: 'clamp(40px, 6vw, 64px) 0 24px' }}>
+      <div className="max-w-[1100px] mx-auto px-6 lg:px-10">
+        <div className="flex flex-col md:flex-row justify-between gap-10 mb-12">
+          <div>
+            <p style={{ fontWeight: 600, fontSize: 18, letterSpacing: '-0.04em', color: 'var(--ink)', marginBottom: 8 }}>
+              Flow
+            </p>
+            <p style={{ color: 'var(--ink-muted)', fontSize: 13, lineHeight: 1.4, maxWidth: 260 }}>
+              Custom websites for businesses that care about their online presence.
             </p>
           </div>
 
           <div className="flex gap-16 flex-wrap">
-            <div>
-              <p className="text-xs text-[var(--color-text-muted)] uppercase tracking-wider mb-4">Navigate</p>
-              <div className="flex flex-col gap-2.5">
-                {['Services', 'Work', 'Process', 'FAQ', 'Contact'].map((l) => (
-                  <a key={l} href={`#${l.toLowerCase()}`} onClick={go(l.toLowerCase())} className="text-sm text-[var(--color-text-secondary)] hover:text-white transition-colors">
-                    {l}
-                  </a>
-                ))}
+            {cols.map((col) => (
+              <div key={col.title}>
+                <p style={{ fontSize: 13, fontWeight: 500, color: 'var(--ink-muted)', marginBottom: 14 }}>{col.title}</p>
+                <div className="flex flex-col gap-2">
+                  {col.links.map((l) => (
+                    <a
+                      key={l.label}
+                      href={l.href || `#${l.id}`}
+                      onClick={l.id ? go(l.id) : undefined}
+                      target={l.href?.startsWith('http') ? '_blank' : undefined}
+                      rel={l.href?.startsWith('http') ? 'noopener noreferrer' : undefined}
+                      className="hover:text-white transition-colors"
+                      style={{ color: 'var(--ink-muted)', fontSize: 13, textDecoration: 'none', lineHeight: 1.8 }}
+                    >
+                      {l.label}
+                    </a>
+                  ))}
+                </div>
               </div>
-            </div>
-            <div>
-              <p className="text-xs text-[var(--color-text-muted)] uppercase tracking-wider mb-4">Contact</p>
-              <div className="flex flex-col gap-2.5">
-                <a href="mailto:hello@flow.my" className="text-sm text-[var(--color-text-secondary)] hover:text-white transition-colors inline-flex items-center gap-2">
-                  <Mail size={14} /> hello@flow.my
-                </a>
-                <a href="https://wa.me/601234567890" target="_blank" rel="noopener noreferrer" className="text-sm text-[var(--color-text-secondary)] hover:text-white transition-colors">
-                  WhatsApp
-                </a>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 
-        <div className="border-t border-[var(--color-border)] pt-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <p className="text-xs text-[var(--color-text-muted)]">
+        <div style={{ borderTop: '1px solid var(--hairline-soft)', paddingTop: 16 }} className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+          <p style={{ fontSize: 12, color: 'var(--ink-muted)', opacity: 0.6 }}>
             © {new Date().getFullYear()} Flow IT Solution
           </p>
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="text-xs text-[var(--color-text-muted)] hover:text-white transition-colors bg-transparent border-none cursor-pointer"
+            className="bg-transparent border-none cursor-pointer hover:text-white transition-colors"
+            style={{ fontSize: 12, color: 'var(--ink-muted)', opacity: 0.6 }}
           >
-            ↑ Back to top
+            Back to top ↑
           </button>
         </div>
       </div>

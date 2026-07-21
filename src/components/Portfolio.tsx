@@ -1,54 +1,75 @@
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const projects = [
-  { title: 'Luxe Boutique', category: 'E-Commerce', desc: 'A dark, editorial online store for a Malaysian fashion label.', color: '#3f3f46' },
-  { title: 'KL Dental Clinic', category: 'Healthcare', desc: 'Clean, trust-building site with online booking.', color: '#27272a' },
-  { title: 'Ahmad Consulting', category: 'Corporate', desc: 'Corporate site with animated case studies and lead capture.', color: '#3f3f46' },
-  { title: 'Teh Tarik House', category: 'F&B', desc: 'Landing page with online menu and delivery links.', color: '#27272a' },
-  { title: 'Sara Portfolio', category: 'Personal', desc: 'Minimalist portfolio with interactive case studies.', color: '#3f3f46' },
-  { title: 'KL Fitness Studio', category: 'Fitness', desc: 'Bold, high-energy site with class booking integration.', color: '#27272a' },
+  { title: 'Luxe Boutique', tag: 'E-Commerce', desc: 'Dark editorial online store for a Malaysian fashion label.', bg: 'linear-gradient(135deg, #1a1a2e, #16213e)' },
+  { title: 'KL Dental', tag: 'Healthcare', desc: 'Trust-building website with online booking integration.', bg: 'var(--surface-1)' },
+  { title: 'Ahmad Consulting', tag: 'Corporate', desc: 'Animated case studies and lead-capture system.', bg: 'linear-gradient(135deg, #6a4cf5 0%, #3b2b8c 100%)' },
+  { title: 'Teh Tarik House', tag: 'F&B', desc: 'Online menu, delivery links, Google Maps integration.', bg: 'var(--surface-2)' },
+  { title: 'Sara Portfolio', tag: 'Personal', desc: 'Minimalist portfolio with interactive case studies.', bg: 'linear-gradient(135deg, #d44df0 0%, #6a4cf5 100%)' },
+  { title: 'KL Fitness', tag: 'Fitness', desc: 'High-energy site with class booking and schedules.', bg: 'var(--surface-1)' },
 ];
 
 export default function Portfolio() {
   const ref = useScrollReveal();
 
   return (
-    <section id="work" ref={ref} className="py-24 md:py-36">
-      <div className="max-w-[1100px] mx-auto px-6 lg:px-12">
-        <div className="reveal mb-16 md:mb-24 max-w-lg" style={{ opacity: 0, transform: 'translateY(24px)', transition: 'all 0.7s ease' }}>
-          <p className="text-xs tracking-[0.2em] uppercase text-[var(--color-text-muted)] mb-4">Selected work</p>
-          <h2 className="text-3xl md:text-5xl leading-tight" style={{ fontFamily: 'var(--font-display)' }}>
+    <section id="work" ref={ref} style={{ padding: 'clamp(48px, 8vw, 96px) 0' }}>
+      <div className="max-w-[1100px] mx-auto px-6 lg:px-10">
+        <div className="reveal mb-14 md:mb-20" style={{ opacity: 0, transform: 'translateY(20px)', transition: 'all 0.6s ease' }}>
+          <p style={{ color: 'var(--ink-muted)', fontSize: 13, fontWeight: 500, letterSpacing: '-0.01em', marginBottom: 16 }}>
+            Selected work
+          </p>
+          <h2
+            style={{
+              fontWeight: 500,
+              lineHeight: 1,
+              letterSpacing: 'clamp(-2px, -0.04em, -1px)',
+              fontSize: 'clamp(32px, 6vw, 62px)',
+              color: 'var(--ink)',
+            }}
+          >
             Projects we're proud of.
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {projects.map((p, i) => (
             <div
               key={p.title}
-              className="reveal group cursor-pointer"
-              style={{ opacity: 0, transform: 'translateY(24px)', transition: `all 0.6s ease ${i * 60}ms` }}
+              className="reveal group rounded-[20px] overflow-hidden cursor-pointer"
+              style={{
+                opacity: 0,
+                transform: 'translateY(20px)',
+                transition: `all 0.6s ease ${i * 60}ms`,
+                background: p.bg,
+              }}
             >
-              <div
-                className="aspect-[4/3] rounded-xl mb-4 flex items-end p-6 relative overflow-hidden"
-                style={{ background: p.color }}
-              >
-                <div className="absolute inset-0 bg-white/0 group-hover:bg-white/[0.03] transition-colors duration-300" />
-                <div className="relative z-10">
-                  <p className="text-[11px] text-white/40 uppercase tracking-wider mb-1">{p.category}</p>
-                  <h3 className="text-lg font-medium" style={{ fontFamily: 'var(--font-display)' }}>{p.title}</h3>
+              <div className="flex flex-col justify-end aspect-[3/2] p-8 md:p-10 relative">
+                <div className="absolute inset-0 bg-white/0 group-hover:bg-white/[0.04] transition-colors duration-300 rounded-[20px]" />
+                <div className="absolute top-8 right-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white/50 group-hover:text-white/90">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+                </div>
+                <div className="relative z-10 transition-transform duration-500 group-hover:-translate-y-2">
+                  <p style={{ fontSize: 12, fontWeight: 500, letterSpacing: '-0.01em', textTransform: 'uppercase', marginBottom: 8, color: 'var(--ink-muted)' }}>
+                    {p.tag}
+                  </p>
+                  <h3 style={{ fontWeight: 500, fontSize: 'clamp(22px, 3vw, 32px)', letterSpacing: '-0.03em', lineHeight: 1.13, marginBottom: 6, color: 'var(--ink)' }}>
+                    {p.title}
+                  </h3>
+                  <p style={{ fontSize: 14, lineHeight: 1.4, color: 'rgba(255,255,255,0.65)', maxWidth: 300 }}>
+                    {p.desc}
+                  </p>
                 </div>
               </div>
-              <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed px-1">{p.desc}</p>
             </div>
           ))}
         </div>
 
-        <div className="reveal text-center mt-16" style={{ opacity: 0, transform: 'translateY(16px)', transition: 'all 0.6s ease 400ms' }}>
+        <div className="reveal text-center mt-12" style={{ opacity: 0, transform: 'translateY(12px)', transition: 'all 0.5s ease 300ms' }}>
           <a
             href="#contact"
             onClick={(e) => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }}
-            className="text-sm text-[var(--color-text-secondary)] hover:text-white transition-colors border-b border-[var(--color-border)] hover:border-white/40 pb-1"
+            style={{ color: 'var(--accent)', fontSize: 14, fontWeight: 500 }}
           >
             Start your project →
           </a>
