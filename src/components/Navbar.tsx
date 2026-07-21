@@ -1,213 +1,104 @@
 import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { X } from 'lucide-react';
 
-const navLinks = ['About', 'Services', 'Portfolio', 'Pricing', 'Contact'];
+const links = ['Services', 'Work', 'Process', 'FAQ', 'Contact'];
 
 export default function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const handleNavClick = (link: string) => {
-    setMenuOpen(false);
-    const id = link.toLowerCase();
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+      const esc = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
+      document.addEventListener('keydown', esc);
+      return () => { document.body.style.overflow = ''; document.removeEventListener('keydown', esc); };
+    }
+  }, [open]);
+
+  const go = (id: string) => {
+    setOpen(false);
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
     <>
       <nav
-        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-5"
+        className="fixed top-0 inset-x-0 z-50 flex items-center justify-between h-16 px-6 lg:px-12 transition-all duration-500"
         style={{
-          background: scrolled ? 'rgba(10,6,8,0.85)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(20px)' : 'none',
-          WebkitBackdropFilter: scrolled ? 'blur(20px)' : 'none',
-          borderBottom: scrolled ? '1px solid rgba(255,255,255,0.07)' : 'none',
-          transition: 'background 0.4s ease, backdrop-filter 0.4s ease',
+          background: scrolled ? 'rgba(9,9,11,0.9)' : 'transparent',
+          backdropFilter: scrolled ? 'blur(12px)' : 'none',
+          borderBottom: scrolled ? '1px solid var(--color-border)' : '1px solid transparent',
         }}
       >
-        {/* Brand */}
-        <a
-          href="#"
-          className="font-dancing text-white text-2xl md:text-3xl font-semibold tracking-wide"
-          style={{ fontFamily: "'Dancing Script', cursive" }}
-        >
+        <a href="#" className="text-xl font-semibold tracking-wide" style={{ fontFamily: 'var(--font-brand)' }}>
           Flow
         </a>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-10">
-          {navLinks.map((link) => (
+        <div className="hidden md:flex items-center gap-8">
+          {links.map((l) => (
             <button
-              key={link}
-              onClick={() => handleNavClick(link)}
-              className="text-white/80 hover:text-white text-sm tracking-wide transition-colors duration-200 font-inter"
-              style={{ fontFamily: "'Inter', sans-serif", background: 'none', border: 'none', cursor: 'pointer' }}
+              key={l}
+              onClick={() => go(l.toLowerCase())}
+              className="text-sm text-[var(--color-text-secondary)] hover:text-white transition-colors bg-transparent border-none cursor-pointer"
             >
-              {link}
+              {l}
             </button>
           ))}
+          <a
+            href="#contact"
+            onClick={(e) => { e.preventDefault(); go('contact'); }}
+            className="text-sm px-5 py-2 border border-[var(--color-border)] rounded-full text-white hover:bg-white hover:text-black transition-all duration-300"
+          >
+            Get in touch
+          </a>
         </div>
 
-        {/* Desktop CTA */}
-        <a
-          href="#contact"
-          className="hidden md:block bg-white text-black px-6 py-2.5 rounded-full font-medium text-sm tracking-wide hover:bg-white/90 transition-all duration-300 button-glow"
-          style={{ fontFamily: "'Inter', sans-serif" }}
-        >
-          Get a Quote
-        </a>
-
-        {/* Mobile Hamburger */}
         <button
-          id="mobile-menu-btn"
-          aria-label="Toggle menu"
-          aria-expanded={menuOpen}
-          className="md:hidden relative w-10 h-10 flex flex-col justify-center items-center gap-0"
-          onClick={() => setMenuOpen((v) => !v)}
-          style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+          aria-label="Menu"
+          aria-expanded={open}
+          className="md:hidden w-11 h-11 flex flex-col justify-center items-center gap-[5px] bg-transparent border-none cursor-pointer"
+          onClick={() => setOpen(!open)}
         >
-          <span
-            style={{
-              display: 'block',
-              width: '22px',
-              height: '2px',
-              background: 'white',
-              transformOrigin: 'center',
-              transition: 'transform 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.25s ease',
-              transform: menuOpen ? 'rotate(45deg) translate(0, 9px)' : 'none',
-            }}
-          />
-          <span
-            style={{
-              display: 'block',
-              width: '22px',
-              height: '2px',
-              background: 'white',
-              margin: '4px 0',
-              transition: 'transform 0.25s ease, opacity 0.25s ease',
-              opacity: menuOpen ? 0 : 1,
-              transform: menuOpen ? 'scaleX(0)' : 'scaleX(1)',
-            }}
-          />
-          <span
-            style={{
-              display: 'block',
-              width: '22px',
-              height: '2px',
-              background: 'white',
-              transformOrigin: 'center',
-              transition: 'transform 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.25s ease',
-              transform: menuOpen ? 'rotate(-45deg) translate(0, -9px)' : 'none',
-            }}
-          />
+          <span className="block w-5 h-[1.5px] bg-white transition-transform duration-300" style={{ transform: open ? 'translateY(3.25px) rotate(45deg)' : 'none' }} />
+          <span className="block w-5 h-[1.5px] bg-white transition-all duration-300" style={{ opacity: open ? 0 : 1 }} />
+          <span className="block w-5 h-[1.5px] bg-white transition-transform duration-300" style={{ transform: open ? 'translateY(-3.25px) rotate(-45deg)' : 'none' }} />
         </button>
       </nav>
 
-      {/* Mobile Menu Overlay */}
-      <div
-        style={{
-          position: 'fixed',
-          inset: 0,
-          zIndex: 40,
-          pointerEvents: menuOpen ? 'auto' : 'none',
-          background: menuOpen ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0)',
-          transition: 'background 0.3s ease',
-        }}
-        onClick={() => setMenuOpen(false)}
-      />
+      {open && <div className="fixed inset-0 z-40 bg-black/60" onClick={() => setOpen(false)} />}
 
-      {/* Mobile Slide Panel */}
       <div
+        className="fixed top-0 right-0 bottom-0 z-50 w-[80%] max-w-[320px] flex flex-col p-10 pt-20 transition-transform duration-400"
         style={{
-          position: 'fixed',
-          top: 0,
-          right: 0,
-          bottom: 0,
-          width: '85%',
-          maxWidth: '340px',
-          zIndex: 50,
-          background: 'rgba(10,6,8,0.97)',
-          backdropFilter: 'blur(24px)',
-          WebkitBackdropFilter: 'blur(24px)',
-          borderLeft: '1px solid rgba(255,255,255,0.1)',
-          transform: menuOpen ? 'translateX(0)' : 'translateX(100%)',
-          transition: 'transform 0.4s cubic-bezier(0.22,1,0.36,1)',
-          display: 'flex',
-          flexDirection: 'column',
-          padding: '80px 32px 48px',
+          background: 'var(--color-bg)',
+          borderLeft: '1px solid var(--color-border)',
+          transform: open ? 'translateX(0)' : 'translateX(100%)',
         }}
       >
-        {/* Close button */}
-        <button
-          onClick={() => setMenuOpen(false)}
-          aria-label="Close menu"
-          style={{
-            position: 'absolute',
-            top: '20px',
-            right: '20px',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            color: 'rgba(255,255,255,0.7)',
-          }}
-        >
-          <X size={22} />
+        <button onClick={() => setOpen(false)} aria-label="Close" className="absolute top-5 right-5 text-[var(--color-text-muted)] bg-transparent border-none cursor-pointer">
+          <X size={20} />
         </button>
-
-        <div className="flex flex-col gap-2 flex-1">
-          {navLinks.map((link, i) => (
-            <button
-              key={link}
-              onClick={() => handleNavClick(link)}
-              style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                fontFamily: "'Inter', sans-serif",
-                color: 'rgba(255,255,255,0.85)',
-                fontSize: '1.25rem',
-                fontWeight: 500,
-                textAlign: 'left',
-                padding: '14px 0',
-                borderBottom: '1px solid rgba(255,255,255,0.08)',
-                opacity: menuOpen ? 1 : 0,
-                transform: menuOpen ? 'translateX(0)' : 'translateX(20px)',
-                transition: `opacity 0.35s ease ${150 + i * 75}ms, transform 0.35s cubic-bezier(0.22,1,0.36,1) ${150 + i * 75}ms`,
-              }}
-            >
-              {link}
-            </button>
-          ))}
-        </div>
-
-        <a
-          href="#contact"
-          onClick={() => setMenuOpen(false)}
-          style={{
-            fontFamily: "'Inter', sans-serif",
-            background: 'white',
-            color: 'black',
-            borderRadius: '9999px',
-            padding: '14px 28px',
-            fontWeight: 600,
-            fontSize: '0.95rem',
-            textAlign: 'center',
-            textDecoration: 'none',
-            display: 'block',
-            opacity: menuOpen ? 1 : 0,
-            transform: menuOpen ? 'translateX(0)' : 'translateX(20px)',
-            transition: `opacity 0.35s ease 450ms, transform 0.35s cubic-bezier(0.22,1,0.36,1) 450ms`,
-          }}
-        >
-          Get a Quote
-        </a>
+        {links.map((l, i) => (
+          <button
+            key={l}
+            onClick={() => go(l.toLowerCase())}
+            className="text-left text-lg py-3 text-[var(--color-text-secondary)] hover:text-white transition-all bg-transparent border-none cursor-pointer border-b border-b-[var(--color-border)]"
+            style={{
+              opacity: open ? 1 : 0,
+              transform: open ? 'none' : 'translateX(16px)',
+              transition: `all 0.3s ease ${100 + i * 60}ms`,
+            }}
+          >
+            {l}
+          </button>
+        ))}
       </div>
     </>
   );

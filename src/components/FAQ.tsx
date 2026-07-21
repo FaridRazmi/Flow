@@ -1,38 +1,32 @@
-import { useState, useRef, useEffect } from 'react';
-import { Plus, Minus } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const faqs = [
-  { q: 'How long does it take to build a website?', a: 'For a Starter package, delivery is typically 1–2 weeks. Pro sites take 2–4 weeks. Enterprise projects are scoped individually. We always give you a clear timeline before we start.' },
-  { q: 'How many revisions are included?', a: 'All packages include unlimited revision rounds until you are 100% satisfied. We want you to love your website — period.' },
-  { q: 'Do I need to buy my own hosting and domain?', a: 'We help you set up hosting and guide you through domain registration. The Pro plan includes a free domain for the first year. We recommend Cloudflare for performance and security.' },
-  { q: 'What is NFC and how does the card work?', a: 'NFC (Near Field Communication) is the same technology behind contactless payments. Hold your Flow NFC card close to any modern smartphone and it instantly opens your digital profile in the browser — no app needed.' },
-  { q: 'Does the NFC card work on iPhone?', a: 'Yes! All iPhones from iPhone 7 (iOS 11+) support NFC reading. Android phones with NFC are also fully compatible (Android 4.4+). Every card also has a printed QR code as a backup.' },
-  { q: 'Can I update my digital profile later?', a: 'Absolutely. Just contact us with the changes and we update your profile remotely — your existing card keeps working with the new info.' },
-  { q: 'Do you offer website maintenance?', a: 'Yes. All plans include at least 1 month of post-launch support. Enterprise plans include monthly maintenance. You can also add a maintenance retainer to any package.' },
-  { q: 'How do I place an order?', a: 'Simply fill out the contact form below or click the WhatsApp button to chat with us directly. We will discuss your requirements and send a formal quote within 24 hours.' },
+  { q: 'How long does a project take?', a: 'Most sites launch in 2–4 weeks. We give you a clear timeline before we start.' },
+  { q: 'How many revisions are included?', a: 'Unlimited rounds until you are 100% satisfied. We want you to love every detail.' },
+  { q: 'Do you help with hosting and domain?', a: 'Yes. We set up hosting and guide you through domain registration. We recommend Cloudflare for performance and security.' },
+  { q: 'Do you offer maintenance after launch?', a: 'All projects include at least one month of support. Extended maintenance retainers are available.' },
+  { q: 'How do I get started?', a: 'Fill out the contact form below or message us on WhatsApp. We respond within 24 hours.' },
 ];
 
-function FAQItem({ faq }: { faq: typeof faqs[0] }) {
+function Item({ faq }: { faq: typeof faqs[0] }) {
   const [open, setOpen] = useState(false);
+  const bodyRef = useRef<HTMLDivElement>(null);
+
   return (
-    <div style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+    <div className="border-b border-[var(--color-border)]">
       <button
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => setOpen(!open)}
         aria-expanded={open}
-        style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 'clamp(16px, 2.5vw, 22px) 0', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', gap: '16px' }}
+        className="w-full flex justify-between items-center py-5 md:py-6 bg-transparent border-none cursor-pointer text-left gap-6"
       >
-        <span style={{ fontFamily: "'Inter', sans-serif", color: 'rgba(255,255,255,0.9)', fontSize: 'clamp(0.875rem, 2vw, 1rem)', fontWeight: 500, lineHeight: 1.45 }}>
-          {faq.q}
+        <span className="text-[15px] md:text-base text-white/90 font-normal leading-snug">{faq.q}</span>
+        <span className="text-xl text-[var(--color-text-muted)] shrink-0 transition-transform duration-300" style={{ transform: open ? 'rotate(45deg)' : 'none' }}>
+          +
         </span>
-        <div style={{ flexShrink: 0, width: '28px', height: '28px', borderRadius: '50%', border: `1px solid ${open ? 'rgba(99,179,237,0.4)' : 'rgba(255,255,255,0.15)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', background: open ? 'rgba(99,179,237,0.15)' : 'transparent', transition: 'all 0.2s ease' }}>
-          {open
-            ? <Minus size={13} color="#63b3ed" strokeWidth={2.5} />
-            : <Plus size={13} color="rgba(255,255,255,0.5)" strokeWidth={2.5} />
-          }
-        </div>
       </button>
-      <div style={{ maxHeight: open ? '300px' : '0', overflow: 'hidden', transition: 'max-height 0.4s cubic-bezier(0.22,1,0.36,1)' }}>
-        <p style={{ fontFamily: "'Inter', sans-serif", color: 'rgba(255,255,255,0.55)', fontSize: 'clamp(0.85rem, 1.8vw, 0.925rem)', lineHeight: 1.75, paddingBottom: 'clamp(16px, 2.5vw, 22px)', paddingRight: '44px' }}>
+      <div style={{ height: open ? bodyRef.current?.scrollHeight + 'px' : '0', overflow: 'hidden', transition: 'height 0.35s ease' }}>
+        <p ref={bodyRef} className="text-sm text-[var(--color-text-secondary)] leading-relaxed pb-6 pr-12">
           {faq.a}
         </p>
       </div>
@@ -41,38 +35,22 @@ function FAQItem({ faq }: { faq: typeof faqs[0] }) {
 }
 
 export default function FAQ() {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('in-view'); }),
-      { threshold: 0.08 }
-    );
-    ref.current?.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
+  const ref = useScrollReveal();
 
   return (
-    <section id="faq" ref={ref} style={{ background: '#050510', padding: 'clamp(60px, 10vw, 100px) 0' }}>
-      <div style={{ maxWidth: '760px', margin: '0 auto', padding: '0 clamp(16px, 5vw, 24px)' }}>
-
-        <div className="reveal text-center" style={{ opacity: 0, transform: 'translateY(30px)', transition: 'all 0.7s cubic-bezier(0.22,1,0.36,1)', marginBottom: 'clamp(36px, 5vw, 60px)' }}>
-          <p style={{ fontFamily: "'Inter', sans-serif", color: '#68d391', fontSize: '12px', letterSpacing: '3px', fontWeight: 600, textTransform: 'uppercase', marginBottom: '12px' }}>
-            Got Questions?
-          </p>
-          <h2 style={{ fontFamily: "'Instrument Serif', serif", color: 'white', fontSize: 'clamp(1.8rem, 5vw, 3.2rem)', lineHeight: 1.1 }}>
-            Frequently Asked Questions
+    <section id="faq" ref={ref} className="py-24 md:py-36" style={{ background: 'var(--color-surface)' }}>
+      <div className="max-w-[720px] mx-auto px-6 lg:px-12">
+        <div className="reveal mb-12 md:mb-16" style={{ opacity: 0, transform: 'translateY(24px)', transition: 'all 0.7s ease' }}>
+          <p className="text-xs tracking-[0.2em] uppercase text-[var(--color-text-muted)] mb-4">FAQ</p>
+          <h2 className="text-3xl md:text-4xl leading-tight" style={{ fontFamily: 'var(--font-display)' }}>
+            Common questions.
           </h2>
         </div>
 
-        <div className="reveal" style={{ opacity: 0, transform: 'translateY(30px)', transition: 'all 0.7s cubic-bezier(0.22,1,0.36,1) 100ms' }}>
-          {faqs.map((faq, i) => <FAQItem key={i} faq={faq} />)}
+        <div className="reveal" style={{ opacity: 0, transform: 'translateY(24px)', transition: 'all 0.7s ease 80ms' }}>
+          {faqs.map((faq, i) => <Item key={i} faq={faq} />)}
         </div>
       </div>
-
-      <style>{`
-        .reveal.in-view { opacity: 1 !important; transform: none !important; }
-      `}</style>
     </section>
   );
 }

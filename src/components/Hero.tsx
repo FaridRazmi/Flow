@@ -1,164 +1,85 @@
-import { useRef, useEffect } from 'react';
-import { Volume2 } from 'lucide-react';
+import { useRef, useEffect, useState } from 'react';
+import { ChevronDown, Volume2, VolumeX } from 'lucide-react';
 
-const HERO_VIDEO =
+const VIDEO_SRC =
   'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260613_180732_a54afbf6-b30d-470e-861f-669871f09f67.mp4';
 
 export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [muted, setMuted] = useState(true);
 
   useEffect(() => {
     videoRef.current?.play().catch(() => {});
   }, []);
 
+  const toggleSound = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setMuted(videoRef.current.muted);
+    }
+  };
+
   return (
-    <section
-      id="hero"
-      className="relative w-full overflow-hidden flex items-center justify-center"
-      style={{ minHeight: '100svh' }}
-    >
-      {/* Background Video */}
+    <section className="relative w-full flex items-end justify-start overflow-hidden" style={{ minHeight: '100svh' }}>
       <video
         ref={videoRef}
-        src={HERO_VIDEO}
-        autoPlay
-        muted
-        loop
-        playsInline
-        style={{
-          position: 'absolute',
-          inset: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-        }}
+        src={VIDEO_SRC}
+        autoPlay muted loop playsInline preload="metadata"
+        className="absolute inset-0 w-full h-full object-cover"
       />
+      <div className="absolute inset-0 bg-black/40" />
+      <div className="absolute bottom-0 inset-x-0 h-1/2" style={{ background: 'linear-gradient(to top, var(--color-bg), transparent)' }} />
 
-      {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-black/30" />
-
-      {/* Bottom gradient */}
-      <div
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: '40%',
-          background: 'linear-gradient(to top, rgba(10,6,8,0.7) 0%, transparent 100%)',
-          pointerEvents: 'none',
-        }}
-      />
-
-      {/* Center Content */}
-      <div
-        className="relative z-10 flex flex-col items-center justify-center px-5 text-center w-full"
-        style={{ paddingTop: '80px', paddingBottom: '60px' }}
-      >
-        <h1
-          className="font-instrument text-white text-glow"
-          style={{
-            fontFamily: "'Instrument Serif', serif",
-            fontSize: 'clamp(2.4rem, 9vw, 110px)',
-            lineHeight: 0.95,
-            letterSpacing: '-0.02em',
-            maxWidth: '900px',
-          }}
-        >
-          Your Digital <br />
-          <em>Identity,</em> Elevated.
-        </h1>
-
-        <p
-          className="text-white/70 text-center"
-          style={{
-            fontFamily: "'Inter', sans-serif",
-            fontSize: 'clamp(0.9rem, 2.5vw, 1.05rem)',
-            marginTop: 'clamp(16px, 3vw, 28px)',
-            maxWidth: '420px',
-            lineHeight: 1.65,
-          }}
-        >
-          Premium website builds and smart NFC cards that share your story with a single tap. No app. No friction.
+      <div className="relative z-10 w-full max-w-[1100px] mx-auto px-6 lg:px-12 pb-20 md:pb-28">
+        <p className="text-[var(--color-text-muted)] text-xs tracking-[0.2em] uppercase mb-6">
+          Web Design Studio
         </p>
-
-        {/* Dual CTAs — stack on mobile */}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '12px',
-            marginTop: 'clamp(24px, 4vw, 36px)',
-            width: '100%',
-            maxWidth: '380px',
-          }}
+        <h1
+          className="text-white leading-[0.95] mb-8"
+          style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.8rem, 8vw, 6.5rem)' }}
         >
+          We build websites<br />
+          <em className="text-[var(--color-text-secondary)]">that convert.</em>
+        </h1>
+        <p className="text-[var(--color-text-secondary)] max-w-md leading-relaxed mb-10 text-base">
+          Thoughtful design meets clean code. We create fast, responsive websites for businesses that care about their online presence.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-3">
           <a
-            href="#services"
-            onClick={(e) => { e.preventDefault(); document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' }); }}
-            className="bg-white text-black rounded-full font-medium text-sm tracking-wide hover:bg-white/90 transition-all duration-300 button-glow"
-            style={{ fontFamily: "'Inter', sans-serif", padding: '15px 32px', textAlign: 'center', textDecoration: 'none', display: 'block' }}
+            href="#contact"
+            onClick={(e) => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }}
+            className="inline-flex items-center justify-center px-8 py-3.5 bg-white text-black text-sm font-medium rounded-full hover:bg-[var(--color-accent)] transition-colors"
           >
-            Get a Website
+            Start a project
           </a>
           <a
-            href="#nfc"
-            onClick={(e) => { e.preventDefault(); document.getElementById('nfc')?.scrollIntoView({ behavior: 'smooth' }); }}
-            className="liquid-glass text-white rounded-full font-medium text-sm tracking-wide"
-            style={{ fontFamily: "'Inter', sans-serif", padding: '15px 32px', textAlign: 'center', textDecoration: 'none', display: 'block' }}
+            href="#work"
+            onClick={(e) => { e.preventDefault(); document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' }); }}
+            className="inline-flex items-center justify-center px-8 py-3.5 border border-white/20 text-white text-sm rounded-full hover:border-white/40 transition-colors"
           >
-            Get Your NFC Card
+            View work
           </a>
-        </div>
-
-        {/* Row of CTAs on larger screens */}
-        <style>{`
-          @media (min-width: 480px) {
-            .hero-cta-wrap {
-              flex-direction: row !important;
-              max-width: none !important;
-              width: auto !important;
-            }
-            .hero-cta-wrap a {
-              display: inline-block !important;
-            }
-          }
-        `}</style>
-      </div>
-
-      {/* Sound Indicator — desktop only */}
-      <div
-        className="absolute bottom-8 left-6 hidden md:flex items-center gap-3"
-        aria-hidden="true"
-      >
-        <div
-          style={{
-            width: '40px',
-            height: '40px',
-            borderRadius: '50%',
-            border: '1px solid rgba(255,255,255,0.2)',
-            background: 'rgba(255,255,255,0.05)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-          }}
-        >
-          <Volume2 size={14} color="rgba(255,255,255,0.6)" />
-        </div>
-        <div>
-          <p style={{ fontFamily: "'Inter', sans-serif", color: 'rgba(255,255,255,0.6)', fontSize: '11px', lineHeight: 1.4 }}>Experience</p>
-          <p style={{ fontFamily: "'Inter', sans-serif", color: 'rgba(255,255,255,0.6)', fontSize: '11px', lineHeight: 1.4 }}>with sound</p>
         </div>
       </div>
 
-      {/* Scroll hint — desktop only */}
-      <div
-        className="absolute bottom-8 right-6 hidden md:flex flex-col items-center gap-2"
-        aria-hidden="true"
+      <button
+        onClick={toggleSound}
+        className="absolute bottom-8 left-6 hidden md:flex items-center gap-2.5 bg-transparent border-none cursor-pointer group"
+        aria-label={muted ? 'Unmute' : 'Mute'}
       >
-        <div style={{ width: '1px', height: '48px', background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.4))' }} />
-        <p style={{ fontFamily: "'Inter', sans-serif", color: 'rgba(255,255,255,0.4)', fontSize: '10px', letterSpacing: '2px', writingMode: 'vertical-rl' }}>SCROLL</p>
+        <div className="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center group-hover:border-white/30 transition-colors">
+          {muted ? <VolumeX size={14} className="text-white/50" /> : <Volume2 size={14} className="text-white/80" />}
+        </div>
+        <span className="text-[11px] text-white/40">{muted ? 'Sound off' : 'Sound on'}</span>
+      </button>
+
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 md:hidden text-white/30 animate-bounce">
+        <ChevronDown size={20} />
+      </div>
+
+      <div className="absolute bottom-8 right-6 hidden md:flex flex-col items-center gap-2">
+        <div className="w-px h-12" style={{ background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.25))' }} />
+        <span className="text-[10px] text-white/30 tracking-[0.15em]" style={{ writingMode: 'vertical-rl' }}>SCROLL</span>
       </div>
     </section>
   );
